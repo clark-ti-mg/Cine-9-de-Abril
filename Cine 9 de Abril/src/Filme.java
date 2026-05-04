@@ -9,7 +9,7 @@ public class Filme {
         this.titulo = titulo;
         this.genero = genero;
         this.duracao = duracao;
-        this.classificacao = classificacao;
+        this.setClassificacao(classificacao);;
         this.descricao = descricao;
     }
 
@@ -35,7 +35,12 @@ public class Filme {
         return classificacao;
     }
     public void setClassificacao(int classificacao) {
-        this.classificacao = classificacao;
+        if(classificacao < 0){
+            this.classificacao = 0;
+        }else if(classificacao > 18){
+            this.classificacao = 18;
+        }else
+            this.classificacao = classificacao;
     }
     public String getDescricao() {
         return descricao;

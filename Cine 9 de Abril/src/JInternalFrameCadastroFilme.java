@@ -110,15 +110,28 @@ public class JInternalFrameCadastroFilme extends JInternalFrame implements Actio
         if (e.getSource()==btSalvar) {
             if(!jtfTitulo.getText().equals("") && !jtfGenero.getText().equals("") && !jtfDuracao.getText().equals("") && 
             !jtfClassificacao.getText().equals("") && !jtaDescricao.getText().equals("")){
-                CinemaDesktop.filmes.add(new Filme(jtfTitulo.getText(), jtfGenero.getText(), Integer.parseInt(jtfDuracao.getText()), 
-                Integer.parseInt(jtfClassificacao.getText()), jtaDescricao.getText()));
+                int classificacao, duracao;
+                try {
+                    classificacao = Integer.parseInt(jtfClassificacao.getText());
+                    duracao = Integer.parseInt(jtfDuracao.getText());
 
-                JOptionPane.showMessageDialog(
-                    null, 
-                    "Filme cadastrado com sucesso", 
-                    "Confirmação", 
-                    JOptionPane.CLOSED_OPTION
-                );
+                    CinemaDesktop.filmes.add(new Filme(jtfTitulo.getText(), jtfGenero.getText(), duracao, 
+                    classificacao, jtaDescricao.getText()));
+
+                    JOptionPane.showMessageDialog(
+                        null, 
+                        "Filme cadastrado com sucesso", 
+                        "Confirmação", 
+                        JOptionPane.CLOSED_OPTION
+                    );
+                } catch (NumberFormatException nfe) {
+                    JOptionPane.showMessageDialog(
+                        null, 
+                        "Campo numérico não pode haver texto", 
+                        "Aviso", 
+                        JOptionPane.WARNING_MESSAGE
+                    );
+                }
             }else{
                 JOptionPane.showMessageDialog(
                     null, 
