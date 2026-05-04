@@ -30,7 +30,7 @@ public class CinemaDesktop extends JFrame implements ActionListener{
     JMenuBar menuBar;
     JMenu aparenciaMenu, lafMenu, filmeMenu, corFundoMenu, sistemaMenu, sessaoMenu;
     JMenuItem cadastrarFilme, visualizarFilmes, excluirFilme, editarFilme;
-    JMenuItem cadastrarSessao, visualizarSessoes, excluirSessao, editarSessao;
+    JMenuItem cadastrarSessao, visualizarSessoes, excluirSessao, editarSessao, apresentarPromocoes;
     JMenuItem informacoesItem, sairItem;
 
     JCheckBoxMenuItem corBranco, corPreto;
@@ -128,21 +128,25 @@ public class CinemaDesktop extends JFrame implements ActionListener{
         visualizarFilmes = new JMenuItem("Visualizar filmes");
         excluirFilme = new JMenuItem("Excluir filme");
         editarFilme = new JMenuItem("Editar filme");
+        apresentarPromocoes = new JMenuItem("Apresentar promoções");
 
         cadastrarFilme.setActionCommand("cadastrarFilme");
         visualizarFilmes.setActionCommand("visualizarFilmes");
         excluirFilme.setActionCommand("excluirFilme");
         editarFilme.setActionCommand("editarFilme");
+        apresentarPromocoes.setActionCommand("apresentarPromocoes");
 
         cadastrarFilme.addActionListener(this);
         visualizarFilmes.addActionListener(this);
         excluirFilme.addActionListener(this);
         editarFilme.addActionListener(this);
+        apresentarPromocoes.addActionListener(this);
 
         filmeMenu.add(cadastrarFilme);
         filmeMenu.add(visualizarFilmes);
         filmeMenu.add(excluirFilme);
         filmeMenu.add(editarFilme);
+        filmeMenu.add(apresentarPromocoes);
         menuBar.add(filmeMenu);
 
         // Sessão
@@ -256,6 +260,26 @@ public class CinemaDesktop extends JFrame implements ActionListener{
                 }
             }else{
                 System.out.println("Já há uma aba de exclusão aberta");
+            }
+            
+        }
+
+        if(e.getActionCommand() == "apresentarPromocoes"){
+            if (JInternalFramePromocao.formulario==0) {
+                if(filmes.size()==0){
+                    JOptionPane.showMessageDialog(CinemaDesktop.this,
+                        "Nenhum filme cadastrado. Sem promoções.",
+                        "Aviso", JOptionPane.ERROR_MESSAGE);
+                }else{
+                    JInternalFramePromocao frame = new JInternalFramePromocao();
+                    jdpPanel.add(frame);
+                    try {
+                        frame.setSelected(true);
+                    } catch (Exception ex) {
+                    }
+                }
+            }else{
+                System.out.println("Já há uma aba de promoções aberta");
             }
             
         }
