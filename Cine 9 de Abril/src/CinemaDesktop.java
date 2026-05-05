@@ -159,7 +159,7 @@ public class CinemaDesktop extends JFrame implements ActionListener{
         cadastrarSessao.addActionListener(this);
         visualizarSessoes.addActionListener(this);
         excluirSessao.addActionListener(this);
-        editarFilme.addActionListener(this);
+        editarSessao.addActionListener(this);
 
         cadastrarSessao.setActionCommand("cadastrarSessao");
         visualizarSessoes.setActionCommand("visualizarSessoes");
@@ -280,6 +280,86 @@ public class CinemaDesktop extends JFrame implements ActionListener{
                 }
             }else{
                 System.out.println("Já há uma aba de promoções aberta");
+            }
+            
+        }
+
+        if(e.getActionCommand() == "cadastrarSessao"){
+            if (JInternalFrameCadastroSessao.formulario==0) {
+                if(filmes.size()==0){
+                    JOptionPane.showMessageDialog(CinemaDesktop.this,
+                        "Nenhum filme cadastrado ainda.",
+                        "Aviso", JOptionPane.ERROR_MESSAGE);
+                }else{
+                    JInternalFrameCadastroSessao frame = new JInternalFrameCadastroSessao();
+                    jdpPanel.add(frame);
+                    try {
+                        frame.setSelected(true);
+                    } catch (Exception ex) {
+                    }
+                }
+            }else{
+                System.out.println("Já há uma aba de cadastro de sessão aberta");
+            }
+            
+        }
+
+        if(e.getActionCommand() == "editarSessao"){
+            if (JInternalFrameEditarSessao.formulario==0) {
+                if(sessoes.size()==0){
+                    JOptionPane.showMessageDialog(CinemaDesktop.this,
+                        "Nenhuma sessão cadastrada ainda.",
+                        "Aviso", JOptionPane.ERROR_MESSAGE);
+                }else{
+                    JInternalFrameEditarSessao frame = new JInternalFrameEditarSessao();
+                    jdpPanel.add(frame);
+                    try {
+                        frame.setSelected(true);
+                    } catch (Exception ex) {
+                    }
+                }
+            }else{
+                System.out.println("Já há uma aba de edição de sessão aberta");
+            }
+            
+        }
+
+        if(e.getActionCommand() == "excluirSessao"){
+            if (JInternalFrameExcluirSessao.formulario==0) {
+                if(sessoes.size()==0){
+                    JOptionPane.showMessageDialog(CinemaDesktop.this,
+                        "Nenhuma sessão cadastrada ainda.",
+                        "Aviso", JOptionPane.ERROR_MESSAGE);
+                }else{
+                    JInternalFrameExcluirSessao frame = new JInternalFrameExcluirSessao();
+                    jdpPanel.add(frame);
+                    try {
+                        frame.setSelected(true);
+                    } catch (Exception ex) {
+                    }
+                }
+            }else{
+                System.out.println("Já há uma aba de exclusão de sessão aberta");
+            }
+            
+        }
+
+        if(e.getActionCommand() == "visualizarSessoes"){
+            if (JInternalFrameVisualizarSessao.formulario==0) {
+                if(sessoes.size()==0){
+                    JOptionPane.showMessageDialog(CinemaDesktop.this,
+                        "Nenhuma sessão cadastrada ainda.",
+                        "Aviso", JOptionPane.ERROR_MESSAGE);
+                }else{
+                    JInternalFrameVisualizarSessao frame = new JInternalFrameVisualizarSessao();
+                    jdpPanel.add(frame);
+                    try {
+                        frame.setSelected(true);
+                    } catch (Exception ex) {
+                    }
+                }
+            }else{
+                System.out.println("Já há uma aba de exclusão de sessão aberta");
             }
             
         }

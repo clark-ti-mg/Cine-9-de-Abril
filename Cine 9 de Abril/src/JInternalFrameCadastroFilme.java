@@ -71,7 +71,7 @@ public class JInternalFrameCadastroFilme extends JInternalFrame implements Actio
         linhaClassificacao.add(jtfClassificacao, BorderLayout.CENTER);
         painelPrincipal.add(linhaClassificacao);
 
-        // Linha 5: Descrição (JTextArea dentro de JScrollPane)
+        // Linha 5: Descrição
         jtaDescricao = new JTextArea(5, 30);
         jtaDescricao.setLineWrap(true);
         jtaDescricao.setWrapStyleWord(true);

@@ -31,6 +31,7 @@ public class JInternalFramePromocao extends JInternalFrame implements ActionList
     JLabel jlTitulo;
     JLabel jlFilmePromocao1, jlFilmePromocao2, jlFilmePromocao3;
 
+    // #1
     JPanel jpMeiaEntrada;
     JLabel jlMeiaTitulo, jlEstudantes, jlIdosos, jlDeficientes, jlProfessores;
     JButton jbSolicitarMeia;
@@ -50,6 +51,7 @@ public class JInternalFramePromocao extends JInternalFrame implements ActionList
         jpPrincipal.setSize(new Dimension(500, 300));
         jpPrincipal.setLayout(new BoxLayout(jpPrincipal, BoxLayout.Y_AXIS));
 
+        // #2
         ImageIcon tabIcon1 = new ImageIcon(getClass().getResource("./imgs/megafone.png"));
         ImageIcon tabIcon2 = new ImageIcon(getClass().getResource("./imgs/tesoura.png"));
 
@@ -102,12 +104,12 @@ public class JInternalFramePromocao extends JInternalFrame implements ActionList
         jbComprar.addActionListener(this);
         jpPrincipal.add(jbComprar);
 
-        // Aba para informações sobre meia-entrada
+        // JTabbedPane para informações sobre meia-entrada
         jpMeiaEntrada = new JPanel();
-        jpMeiaEntrada.setSize(new Dimension(500,300));
+        jpMeiaEntrada.setSize(new Dimension(400, 300));
         jpMeiaEntrada.setLayout(new BoxLayout(jpMeiaEntrada, BoxLayout.Y_AXIS));
 
-        // Conteúdo do painel de meia-entrada
+        // Conteúdo da aba de meia-entrada
         jlMeiaTitulo = new JLabel("Quem tem direito à meia-entrada:");
         jlMeiaTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
         jlMeiaTitulo.setFont(new Font("Serif", Font.BOLD, 14));
@@ -118,10 +120,10 @@ public class JInternalFramePromocao extends JInternalFrame implements ActionList
 
         jpMeiaEntrada.add(jlMeiaTitulo);
 
-        jpMeiaEntrada.add(Box.createRigidArea(new Dimension(0, 20)));
+        jpMeiaEntrada.add(Box.createRigidArea(new Dimension(0,20)));
 
         jlEstudantes = new JLabel("-> Estudantes");
-        jlIdosos = new JLabel("-> Idosos (acima dos 60 anos)");
+        jlIdosos = new JLabel("-> Idosos (acima de 60 anos)");
         jlDeficientes = new JLabel("-> Pessoas com deficiência");
         jlProfessores = new JLabel("-> Professores e doadores de sangue");
 
@@ -138,16 +140,17 @@ public class JInternalFramePromocao extends JInternalFrame implements ActionList
         jbSolicitarMeia = new JButton("Solicitar meia-entrada");
         jbSolicitarMeia.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        jpMeiaEntrada.add(Box.createRigidArea(new Dimension(0, 30)));
-        
+        jpMeiaEntrada.add(Box.createRigidArea(new Dimension(0,30)));
+
         jbSolicitarMeia.addActionListener(this);
         jpMeiaEntrada.add(jbSolicitarMeia);
 
+        // Adicionando os painéis ao JTabbedPane
         jtpPanel.addTab("Promoções", tabIcon1, jpPrincipal);
-        jtpPanel.insertTab("Meia-entrada", tabIcon2, jpMeiaEntrada, "Informações sobre meia-entrada", 1);
+        jtpPanel.insertTab("Meia-Entrada", tabIcon2, jpMeiaEntrada, "Informações sobre Meia-entrada", 1);
 
         jtpPanel.setTabPlacement(JTabbedPane.LEFT);
-        
+
         // Adicionando o painel ao frame
         this.add(jtpPanel);
         this.pack();
@@ -171,50 +174,54 @@ public class JInternalFramePromocao extends JInternalFrame implements ActionList
         if(e.getSource()==jbComprar){
             JOptionPane.showMessageDialog(this, "Parabéns! Compra realizada.", "Compra bem sucedida", JOptionPane.INFORMATION_MESSAGE);
         }
+        // #7
         if(e.getSource()==jbSolicitarMeia){
             JPanel jpSolicitacao = new JPanel();
             jpSolicitacao.setLayout(new BoxLayout(jpSolicitacao, BoxLayout.Y_AXIS));
 
             jpSolicitacao.add(new JLabel("Escolha sua modalidade:"));
 
-            ButtonGroup bg = new ButtonGroup();
+            ButtonGroup bgMeia = new ButtonGroup();
 
-            boolean primeira = true;
+            // Pega todos os componentes da aba, menos o primeiro
+            boolean primeiro = true;
 
             for(Component c : jpMeiaEntrada.getComponents()){
-                if(primeira){
-                    primeira = false;
+                if(primeiro){
+                    primeiro = false;
                     continue;
                 }
 
+                // Verifica se o componente é uma instância de JLabel
                 if(c instanceof JLabel){
+                    // Faz um downcast de Component para JLabel
                     JLabel jl = (JLabel) c;
                     JRadioButton jrb = new JRadioButton(jl.getText());
 
-                    jrb.addItemListener(new ItemListener() {
-                        @Override
-                        public void itemStateChanged(ItemEvent it){
-                            if(jrb.isSelected()){
-                                int opcao = JOptionPane.showConfirmDialog(null, "Solicitar meia-entrada na modalidade " + jrb.getText()+"?", 
-                                "Confirmação de meia-entrada", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    // #10
+                    jrb.addItemListener(
+                        new ItemListener() {
+                            @Override
+                            public void itemStateChanged(ItemEvent it){
+                                if(jrb.isSelected()){
+                                    int opcao = JOptionPane.showConfirmDialog(null, "Solicitar meia-entrada na modalidade " + jrb.getText()+"?", "Confirmação de meia-entrada", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-                                if(opcao==JOptionPane.YES_OPTION){
-                                    jtpPanel.removeTabAt(jtpPanel.getTabCount()-1);
+                                    if(opcao==JOptionPane.YES_OPTION){
+                                        jtpPanel.removeTabAt(jtpPanel.getComponentCount()-1);
+                                    }
                                 }
                             }
                         }
-                    });
+                    );
 
-                    bg.add(jrb);
+                    bgMeia.add(jrb);
                     jpSolicitacao.add(jrb);
-
                 }
             }
 
             jpSolicitacao.setVisible(true);
             jtpPanel.addTab("Escolher meia-entrada", jpSolicitacao);
             jtpPanel.setSelectedIndex(jtpPanel.getTabCount()-1);
-            
         }
     }
 }
