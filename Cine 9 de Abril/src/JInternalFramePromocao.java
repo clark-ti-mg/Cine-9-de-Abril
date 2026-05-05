@@ -174,7 +174,7 @@ public class JInternalFramePromocao extends JInternalFrame implements ActionList
         if(e.getSource()==jbComprar){
             JOptionPane.showMessageDialog(this, "Parabéns! Compra realizada.", "Compra bem sucedida", JOptionPane.INFORMATION_MESSAGE);
         }
-        // #7
+
         if(e.getSource()==jbSolicitarMeia){
             JPanel jpSolicitacao = new JPanel();
             jpSolicitacao.setLayout(new BoxLayout(jpSolicitacao, BoxLayout.Y_AXIS));
@@ -191,14 +191,12 @@ public class JInternalFramePromocao extends JInternalFrame implements ActionList
                     primeiro = false;
                     continue;
                 }
-
                 // Verifica se o componente é uma instância de JLabel
                 if(c instanceof JLabel){
                     // Faz um downcast de Component para JLabel
                     JLabel jl = (JLabel) c;
                     JRadioButton jrb = new JRadioButton(jl.getText());
 
-                    // #10
                     jrb.addItemListener(
                         new ItemListener() {
                             @Override

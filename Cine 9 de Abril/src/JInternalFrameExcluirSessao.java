@@ -6,6 +6,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 import javax.swing.BorderFactory;
@@ -97,7 +101,7 @@ public class JInternalFrameExcluirSessao extends JInternalFrame implements Actio
         container.add(comp, c);
     }
 
-    // Popula o combo com as sessões
+    // Popula o combo com as sessões (exibindo filme, sala, data e hora)
     private void atualizarCombo() {
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
         model.addElement("-- Selecione --");
@@ -112,7 +116,7 @@ public class JInternalFrameExcluirSessao extends JInternalFrame implements Actio
         comboSessoes.setSelectedIndex(0);
     }
 
-    // Exclui a sessão selecionada da lista
+    // Exclui a sessão selecionada da lista.
     private void excluirSelecionado() {
         int idx = comboSessoes.getSelectedIndex() - 1; // -1 por causa do placeholder
         if (idx >= 0 && idx < CinemaDesktop.sessoes.size()) {
@@ -126,6 +130,34 @@ public class JInternalFrameExcluirSessao extends JInternalFrame implements Actio
                     "Confirmação", JOptionPane.YES_NO_OPTION);
             if (confirmacaoOpt == JOptionPane.YES_OPTION) {
                 CinemaDesktop.sessoes.remove(idx);
+
+                SimpleDateFormat sdfData = new SimpleDateFormat("dd/MM/yyyy");
+                sdfData.setLenient(false);
+                SimpleDateFormat sdfHora = new SimpleDateFormat("HH:mm");
+                sdfHora.setLenient(false);
+
+                try {
+                    File arquivo = new File("sessoes.txt");
+                    arquivo.delete();
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(arquivo, true));
+
+                    String linha;
+                    for(int i = 0; i < CinemaDesktop.sessoes.size(); i++){
+                        linha = CinemaDesktop.sessoes.get(i).getFilme() + ";" + CinemaDesktop.sessoes.get(i).getSala() + ";" + 
+                        sdfData.format(CinemaDesktop.sessoes.get(i).getDataInicio()) + ";" + sdfHora.format(CinemaDesktop.sessoes.get(i).getHoraInicio());
+                        bw.write(linha);
+                        bw.newLine();
+                    }
+                
+                    bw.close();
+                } catch (IOException ioe) {
+                    JOptionPane.showMessageDialog(this, "Não foi possível excluir os dados.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Erro ao salvar alterações.", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+
+                
+
                 atualizarCombo();
                 JOptionPane.showMessageDialog(this, "Sessão excluída com sucesso.", "Confirmação",
                         JOptionPane.INFORMATION_MESSAGE);

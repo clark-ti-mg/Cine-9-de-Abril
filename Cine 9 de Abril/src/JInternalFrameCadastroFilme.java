@@ -71,7 +71,7 @@ public class JInternalFrameCadastroFilme extends JInternalFrame implements Actio
         linhaClassificacao.add(jtfClassificacao, BorderLayout.CENTER);
         painelPrincipal.add(linhaClassificacao);
 
-        // Linha 5: Descrição
+        // Linha 5: Descrição (JTextArea dentro de JScrollPane)
         jtaDescricao = new JTextArea(5, 30);
         jtaDescricao.setLineWrap(true);
         jtaDescricao.setWrapStyleWord(true);
@@ -92,8 +92,8 @@ public class JInternalFrameCadastroFilme extends JInternalFrame implements Actio
         linhaBotoes.add(btCancelar);
         painelPrincipal.add(linhaBotoes);
 
-        getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(painelPrincipal, BorderLayout.CENTER);
+        setLayout(new BorderLayout());
+        add(painelPrincipal, BorderLayout.CENTER);
 
         setPreferredSize(new Dimension(480, 380));
         pack();

@@ -121,9 +121,9 @@ public class JInternalFrameEditarFilme extends JInternalFrame implements ActionL
         painelBotoes.add(btSalvar);
         painelBotoes.add(btCancelar);
 
-        getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(painelPrincipal, BorderLayout.CENTER);
-        getContentPane().add(painelBotoes, BorderLayout.SOUTH);
+        setLayout(new BorderLayout());
+        add(painelPrincipal, BorderLayout.CENTER);
+        add(painelBotoes, BorderLayout.SOUTH);
 
         // Inicialmente campos bloqueados e botão salvar desabilitado
         limparCamposEBloquear();

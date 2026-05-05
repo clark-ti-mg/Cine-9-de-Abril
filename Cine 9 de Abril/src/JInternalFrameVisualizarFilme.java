@@ -79,7 +79,7 @@ public class JInternalFrameVisualizarFilme extends JInternalFrame implements Act
 
         painelPrincipal.add(painelDireito, BorderLayout.CENTER);
 
-        getContentPane().add(painelPrincipal, BorderLayout.CENTER);
+        add(painelPrincipal, BorderLayout.CENTER);
 
         setPreferredSize(new Dimension(600, 380));
         pack();

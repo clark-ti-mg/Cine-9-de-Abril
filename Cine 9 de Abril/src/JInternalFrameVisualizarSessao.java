@@ -38,6 +38,9 @@ public class JInternalFrameVisualizarSessao extends JInternalFrame implements Ac
         ++formulario;
         CinemaDesktop.posicao += 30;
 
+        // carregar os dados
+        CinemaDesktop.carregarDados();
+
         JPanel painelPrincipal = new JPanel(new GridBagLayout());
         painelPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         GridBagConstraints c = new GridBagConstraints();
@@ -86,7 +89,7 @@ public class JInternalFrameVisualizarSessao extends JInternalFrame implements Ac
 
         addComponente(painelPrincipal, painelBotoes, c, 1, 2, 1, 1, 0.7, 0.0, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE);
 
-        getContentPane().add(painelPrincipal, BorderLayout.CENTER);
+        add(painelPrincipal, BorderLayout.CENTER);
 
         setPreferredSize(new Dimension(640, 380));
         pack();

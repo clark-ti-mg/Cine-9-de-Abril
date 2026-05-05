@@ -6,12 +6,17 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,12 +24,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
+import javax.swing.text.MaskFormatter;
 
 public class JInternalFrameCadastroSessao extends JInternalFrame implements ActionListener {
     private JTextField jtfFilme;
     private JTextField jtfSala;
-    private JTextField jtfDataInicio;
-    private JTextField jtfHoraInicio;
+    private JFormattedTextField jtfDataInicio;
+    private JFormattedTextField jtfHoraInicio;
     private JButton btSalvar;
     private JButton btCancelar;
     static int formulario = 0;
@@ -49,13 +55,43 @@ public class JInternalFrameCadastroSessao extends JInternalFrame implements Acti
         // Componentes
         jtfFilme = new JTextField(30);
         jtfSala = new JTextField(10);
-        jtfDataInicio = new JTextField(10);
-        jtfHoraInicio = new JTextField(6);
+        
         btSalvar = new JButton("Salvar");
         btCancelar = new JButton("Cancelar");
         btSalvar.addActionListener(this);
         btCancelar.addActionListener(this);
 
+        // MaskFormatter para data e hora
+        MaskFormatter mfData = null;
+        MaskFormatter mfHora = null;
+        try {
+            mfData = new MaskFormatter("##/##/####");
+            mfData.setPlaceholderCharacter('_');
+
+            mfHora = new MaskFormatter("##:##");
+            mfHora.setPlaceholderCharacter('_');
+        } catch (ParseException pe) {
+            System.out.println("Erro ao criar MaskFormatter:" + pe.getMessage());
+        }
+
+        if(mfData != null){
+            jtfDataInicio = new JFormattedTextField(mfData);
+            jtfDataInicio.setColumns(10);
+            jtfDataInicio.setFocusLostBehavior(JFormattedTextField.COMMIT_OR_REVERT);
+        }else{
+            jtfDataInicio = new JFormattedTextField();
+            jtfDataInicio.setColumns(10);
+        }
+        
+        if(mfHora != null){
+            jtfHoraInicio = new JFormattedTextField(mfHora);
+            jtfHoraInicio.setColumns(5);
+            jtfHoraInicio.setFocusLostBehavior(JFormattedTextField.COMMIT_OR_REVERT);
+        }else{
+            jtfHoraInicio = new JFormattedTextField();
+            jtfHoraInicio.setColumns(5);
+        }
+        
         // Linha 1: Filme
         addComponente(painelPrincipal, new JLabel("Filme:"), c, 0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE);
         addComponente(painelPrincipal, jtfFilme, c, 1, 0, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL);
@@ -72,7 +108,7 @@ public class JInternalFrameCadastroSessao extends JInternalFrame implements Acti
         addComponente(painelPrincipal, new JLabel("Hora de Início (HH:mm):"), c, 0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE);
         addComponente(painelPrincipal, jtfHoraInicio, c, 1, 3, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL);
 
-        // Linha 5: Botões alinhados à direita ocupando duas colunas
+        // Linha 5: Botões alinhados à direita (ocupa duas colunas)
         JPanel painelBotoes = new JPanel(new GridBagLayout());
         GridBagConstraints bc = new GridBagConstraints();
         bc.insets = new Insets(0, 6, 0, 6);
@@ -126,7 +162,7 @@ public class JInternalFrameCadastroSessao extends JInternalFrame implements Acti
                 String sala = jtfSala.getText().trim();
                 String dataStr = jtfDataInicio.getText().trim();
                 String horaStr = jtfHoraInicio.getText().trim();
-                    
+
                 SimpleDateFormat sdfData = new SimpleDateFormat("dd/MM/yyyy");
                 sdfData.setLenient(false);
                 SimpleDateFormat sdfHora = new SimpleDateFormat("HH:mm");
@@ -136,8 +172,17 @@ public class JInternalFrameCadastroSessao extends JInternalFrame implements Acti
                     Date data = sdfData.parse(dataStr);
                     Date hora = sdfHora.parse(horaStr);
 
-                    // formatos válidos
-                    CinemaDesktop.sessoes.add(new Sessao(filme, sala, dataStr, horaStr));
+                    // formatos válidos — criar e adicionar
+                    // CinemaDesktop.sessoes.add(new Sessao(filme, sala, dataStr, horaStr));
+                    
+                    String linha = filme + ";" + sala + ";" + dataStr + ";" + horaStr;
+
+                    File arquivo = new File("sessoes.txt");
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(arquivo, true));
+
+                    bw.write(linha);
+                    bw.newLine();
+                    bw.close();
 
                     JOptionPane.showMessageDialog(
                         null,
@@ -146,11 +191,14 @@ public class JInternalFrameCadastroSessao extends JInternalFrame implements Acti
                         JOptionPane.INFORMATION_MESSAGE
                     );
 
-                    // limpa os campos após salvar
+                    // limpar campos após salvar
                     jtfFilme.setText("");
                     jtfSala.setText("");
                     jtfDataInicio.setText("");
                     jtfHoraInicio.setText("");
+                    jtfFilme.requestFocus();
+
+                    CinemaDesktop.carregarDados();
 
                 } catch (ParseException pe) {
                     JOptionPane.showMessageDialog(
@@ -159,7 +207,7 @@ public class JInternalFrameCadastroSessao extends JInternalFrame implements Acti
                         "Aviso",
                         JOptionPane.WARNING_MESSAGE
                     );
-                } catch (Exception ex) {
+                } catch (IOException ioe) {
                     JOptionPane.showMessageDialog(
                         null,
                         "Erro ao cadastrar sessão",

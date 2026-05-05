@@ -6,6 +6,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -96,7 +100,7 @@ public class JInternalFrameEditarSessao extends JInternalFrame implements Action
         addComponente(painelPrincipal, new JLabel("Hora (HH:mm):"), c, 0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE);
         addComponente(painelPrincipal, jtfHoraInicio, c, 1, 3, 1, 1, 0.2, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL);
 
-        // Linha 4: Botões alinhados à direita
+        // Linha 4: Botões (Salvar | Cancelar) alinhados à direita
         JPanel painelBotoes = new JPanel(new GridBagLayout());
         GridBagConstraints bc = new GridBagConstraints();
         bc.insets = new Insets(0, 6, 0, 6);
@@ -111,6 +115,7 @@ public class JInternalFrameEditarSessao extends JInternalFrame implements Action
         setLayout(new BorderLayout());
         add(painelPrincipal, BorderLayout.CENTER);
 
+        // Inicialmente campos bloqueados e botão salvar desabilitado
         limparCamposEBloquear();
 
         setPreferredSize(new Dimension(640, 260));
@@ -133,7 +138,7 @@ public class JInternalFrameEditarSessao extends JInternalFrame implements Action
         container.add(comp, c);
     }
 
-    // Popula o combo com as sessões
+    // Popula o combo com as sessões (exibindo filme, sala, data e hora)
     private void atualizarCombo() {
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
         model.addElement("-- Selecione --");
@@ -216,14 +221,32 @@ public class JInternalFrameEditarSessao extends JInternalFrame implements Action
             s.setDataInicio(dataStr); // Sessao.setDataInicio espera String
             s.setHoraInicio(horaStr); // Sessao.setHoraInicio espera String
 
-            // Atualiza o combo mantendo seleção
+            File arquivo = new File("sessoes.txt");
+            arquivo.delete();
+            BufferedWriter bw = new BufferedWriter(new FileWriter(arquivo, true));
+
+            String linha;
+            for(int i = 0; i < CinemaDesktop.sessoes.size(); i++){
+                linha = CinemaDesktop.sessoes.get(i).getFilme() + ";" + CinemaDesktop.sessoes.get(i).getSala() + ";" + 
+                sdfData.format(CinemaDesktop.sessoes.get(i).getDataInicio()) + ";" + sdfHora.format(CinemaDesktop.sessoes.get(i).getHoraInicio());
+                bw.write(linha);
+                bw.newLine();
+            }
+            
+            bw.close();
+
+            // Atualiza visual do combo mantendo seleção
             int selecionado = indiceCarregado;
             atualizarCombo();
             comboSessoes.setSelectedIndex(selecionado + 1); // +1 por placeholder
 
+            CinemaDesktop.carregarDados();
+
             JOptionPane.showMessageDialog(this, "Alterações salvas com sucesso.", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
         } catch (ParseException pe) {
             JOptionPane.showMessageDialog(this, "Formato de data ou hora inválido.\nData: dd/MM/yyyy  Hora: HH:mm", "Aviso", JOptionPane.WARNING_MESSAGE);
+        } catch (IOException ioe) {
+            JOptionPane.showMessageDialog(this, "Não foi possível editar os dados.", "Aviso", JOptionPane.WARNING_MESSAGE);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Erro ao salvar alterações.", "Erro", JOptionPane.ERROR_MESSAGE);
         }

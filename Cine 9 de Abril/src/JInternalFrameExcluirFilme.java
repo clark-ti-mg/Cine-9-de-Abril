@@ -60,8 +60,8 @@ public class JInternalFrameExcluirFilme extends JInternalFrame implements Action
         painelBotoes.add(btCancelar);
         painelPrincipal.add(painelBotoes);
 
-        getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(painelPrincipal, BorderLayout.CENTER);
+        setLayout(new BorderLayout());
+        add(painelPrincipal, BorderLayout.CENTER);
 
         setPreferredSize(new Dimension(400, 180));
         pack();
