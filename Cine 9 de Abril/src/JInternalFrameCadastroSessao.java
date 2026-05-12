@@ -198,7 +198,7 @@ public class JInternalFrameCadastroSessao extends JInternalFrame implements Acti
                     jtfHoraInicio.setText("");
                     jtfFilme.requestFocus();
 
-                    CinemaDesktop.carregarDados();
+                    CinemaDesktop.carregarDadosSessoes();
 
                 } catch (ParseException pe) {
                     JOptionPane.showMessageDialog(

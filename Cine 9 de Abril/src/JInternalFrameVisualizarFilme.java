@@ -39,6 +39,9 @@ public class JInternalFrameVisualizarFilme extends JInternalFrame implements Act
         ++formulario;
         CinemaDesktop.posicao += 30;
 
+        // Carrega dados de filmes
+        CinemaDesktop.carregarDadosFilmes();
+
         // Painel principal
         JPanel painelPrincipal = new JPanel(new BorderLayout(8, 8));
         painelPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));

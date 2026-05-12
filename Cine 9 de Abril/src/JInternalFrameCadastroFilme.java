@@ -4,6 +4,11 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -115,19 +120,47 @@ public class JInternalFrameCadastroFilme extends JInternalFrame implements Actio
                     classificacao = Integer.parseInt(jtfClassificacao.getText());
                     duracao = Integer.parseInt(jtfDuracao.getText());
 
-                    CinemaDesktop.filmes.add(new Filme(jtfTitulo.getText(), jtfGenero.getText(), duracao, 
-                    classificacao, jtaDescricao.getText()));
+                    Filme filme = new Filme(jtfTitulo.getText(), jtfGenero.getText(), duracao, 
+                    classificacao, jtaDescricao.getText());
+
+                    CinemaDesktop.filmes.add(filme);
+
+                    File arquivo = new File("filmes.fi");
+
+                    arquivo.delete();
+                    arquivo.createNewFile();
+
+                    FileOutputStream fos = new FileOutputStream(arquivo);
+                    ObjectOutputStream objo = new ObjectOutputStream(fos);
+                    
+                    objo.writeObject(CinemaDesktop.filmes);
+
+                    objo.close();
 
                     JOptionPane.showMessageDialog(
                         null, 
-                        "Filme cadastrado com sucesso", 
+                        "Filme cadastrado com sucesso.", 
                         "Confirmação", 
                         JOptionPane.CLOSED_OPTION
                     );
                 } catch (NumberFormatException nfe) {
                     JOptionPane.showMessageDialog(
                         null, 
-                        "Campo numérico não pode haver texto", 
+                        "Campo numérico não pode haver texto.", 
+                        "Aviso", 
+                        JOptionPane.WARNING_MESSAGE
+                    );
+                }catch (FileNotFoundException fnfe) {
+                    JOptionPane.showMessageDialog(
+                        null, 
+                        "Não foi possível encontrar o arquivo para salvar os dados" + fnfe.getMessage(), 
+                        "Aviso", 
+                        JOptionPane.WARNING_MESSAGE
+                    );
+                }catch (IOException ioe) {
+                    JOptionPane.showMessageDialog(
+                        null, 
+                        "Houve problema ao manipular o arquivo de entrada e saída:" + ioe.getMessage(), 
                         "Aviso", 
                         JOptionPane.WARNING_MESSAGE
                     );

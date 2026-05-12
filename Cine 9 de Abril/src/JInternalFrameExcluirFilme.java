@@ -4,6 +4,10 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -90,6 +94,24 @@ public class JInternalFrameExcluirFilme extends JInternalFrame implements Action
                     "Confirmação", JOptionPane.YES_NO_OPTION);
             if (confirmacaoOpt == JOptionPane.YES_OPTION) {
                 CinemaDesktop.filmes.remove(idx);
+
+                try {
+                    File arquivo = new File("filmes.fi");
+
+                    arquivo.delete();
+                    arquivo.createNewFile();
+
+                    ObjectOutputStream objo = new ObjectOutputStream(new FileOutputStream(arquivo));
+
+                    objo.writeObject(CinemaDesktop.filmes);
+                
+                    objo.close();
+                } catch (IOException ioe) {
+                    JOptionPane.showMessageDialog(this, "Não foi possível excluir os dados.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Erro ao salvar alterações.", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+
                 atualizarCombo();
                 JOptionPane.showMessageDialog(this, "Filme excluído com sucesso.", "Confirmação",
                         JOptionPane.INFORMATION_MESSAGE);

@@ -39,7 +39,7 @@ public class JInternalFrameVisualizarSessao extends JInternalFrame implements Ac
         CinemaDesktop.posicao += 30;
 
         // carregar os dados
-        CinemaDesktop.carregarDados();
+        CinemaDesktop.carregarDadosSessoes();
 
         JPanel painelPrincipal = new JPanel(new GridBagLayout());
         painelPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));

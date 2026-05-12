@@ -240,7 +240,7 @@ public class JInternalFrameEditarSessao extends JInternalFrame implements Action
             atualizarCombo();
             comboSessoes.setSelectedIndex(selecionado + 1); // +1 por placeholder
 
-            CinemaDesktop.carregarDados();
+            CinemaDesktop.carregarDadosSessoes();
 
             JOptionPane.showMessageDialog(this, "Alterações salvas com sucesso.", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
         } catch (ParseException pe) {

@@ -157,7 +157,6 @@ public class JInternalFrameExcluirSessao extends JInternalFrame implements Actio
                 }
 
                 
-
                 atualizarCombo();
                 JOptionPane.showMessageDialog(this, "Sessão excluída com sucesso.", "Confirmação",
                         JOptionPane.INFORMATION_MESSAGE);

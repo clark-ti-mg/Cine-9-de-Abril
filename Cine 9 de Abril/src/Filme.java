@@ -1,4 +1,6 @@
-public class Filme {
+import java.io.Serializable;
+
+public class Filme implements Serializable{
     String titulo;
     String genero;
     int duracao; // em minutos

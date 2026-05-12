@@ -20,8 +20,10 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 
 public class CinemaDesktop extends JFrame implements ActionListener{
     JList<String> jListaFilmes;
@@ -75,14 +77,18 @@ public class CinemaDesktop extends JFrame implements ActionListener{
         setJMenuBar(criarMenuBar());
 
         // carrega os dados do arquivo ao abrir o programa
-        carregarDados();
+        carregarDadosSessoes();
+        carregarDadosFilmes();
 
         setVisible(true);
     }
 
-    public static void carregarDados(){
+    public static void carregarDadosSessoes(){
         try {
             File arquivo = new File("sessoes.txt");
+            if(!arquivo.exists()){
+                arquivo.createNewFile();
+            }
             BufferedReader br = new BufferedReader(new FileReader(arquivo));
             CinemaDesktop.sessoes = new ArrayList<>();
             
@@ -93,7 +99,34 @@ public class CinemaDesktop extends JFrame implements ActionListener{
             }
             br.close();
         } catch (IOException ioe) {
-            JOptionPane.showMessageDialog(null, "Não foi possível carregar os dados.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Não foi possível carregar os dados de sessões.", "Aviso", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    public static void carregarDadosFilmes(){
+        try {
+            File arquivo = new File("filmes.fi");
+
+            if(!arquivo.exists()){
+                arquivo.createNewFile();
+                return;
+            }
+
+            if(arquivo.length()==0){
+                return;
+            }
+            
+            ObjectInputStream objinput = new ObjectInputStream(new FileInputStream(arquivo));
+            CinemaDesktop.filmes = (ArrayList<Filme>) objinput.readObject();
+            
+            objinput.close();
+            
+        } catch (IOException ioe) {
+            JOptionPane.showMessageDialog(null, "Não foi possível carregar os dados de filmes.", "Aviso", JOptionPane.WARNING_MESSAGE);
+        }catch (ClassNotFoundException cnfe) {
+            JOptionPane.showMessageDialog(null, "Não foi possível converter a classe:" + cnfe.getMessage(), "Aviso", JOptionPane.WARNING_MESSAGE);
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null, "Exceção genérica:" + e.getMessage(), "Aviso", JOptionPane.WARNING_MESSAGE);
         }
     }
 

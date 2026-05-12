@@ -4,6 +4,10 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -231,10 +235,33 @@ public class JInternalFrameEditarFilme extends JInternalFrame implements ActionL
         f.setClassificacao(classificacao);
         f.setDescricao(descricao);
 
+        try {
+            File arquivo = new File("filmes.fi");
+
+            arquivo.delete();
+            arquivo.createNewFile();
+
+            FileOutputStream fos = new FileOutputStream(arquivo);
+            ObjectOutputStream objo = new ObjectOutputStream(fos);
+
+            objo.writeObject(CinemaDesktop.filmes);
+
+            objo.close();
+        } catch (IOException ioe) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Houve problema ao manipular o arquivo de entrada e saída de filmes:" + ioe.getMessage(), 
+                "Aviso", 
+                JOptionPane.WARNING_MESSAGE
+            );
+        }
+        
         // Atualiza o combo visual (mantém seleção no mesmo índice)
         int selecionado = indiceCarregado;
         atualizarCombo();
         comboFilmes.setSelectedIndex(selecionado + 1); // +1 por causa do placeholder
+
+        CinemaDesktop.carregarDadosFilmes();
 
         JOptionPane.showMessageDialog(this, "Alterações salvas com sucesso.", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
     }
